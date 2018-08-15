@@ -1,0 +1,29 @@
+{
+  "name": "ruby-on-whales",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "blessed": "^0.1.81",
+    "chalk": "^2.4.1",
+    "cross-spawn": "^6.0.5",
+    "lodash": "^4.17.10",
+    "react": "^16.4.0",
+    "react-blessed": "^0.2.1",
+    "react-spring": "^5.3.8",
+    "ws": "^5.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "whales": "./index.js"
+  },
+  "author": "Ethan Lee",
+  "license": "ISC"
+}
