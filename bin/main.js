@@ -14,7 +14,7 @@ const ngrok = require("ngrok");
 
 // For now, this is just the Rails server spin-up
 const command = "unbuffer";
-const workingDir = path.resolve("../onboarding-docker");
+const workingDir = path.resolve("../whales-docker");
 
 const locationArgs = [
   "-f",

@@ -29,7 +29,7 @@ class Termbox extends Component {
           width="50%"
           height="100%"
           shell={`docker-compose`}
-          args={[...this.props.locationArgs, "run", "web", "/bin/sh"]}
+          args={[...this.props.locationArgs, "run", "web", "/bin/bash"]}
           keys={true}
           border={{ type: "line" }}
           style={{ border: { fg: "white" }, focus: { border: { fg: "green" } }}}
