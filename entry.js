@@ -1,6 +1,6 @@
 import React from "react";
-import blessed from "blessed";
-import { render } from "react-blessed";
+import blessed from "@calblueprint/blessed";
+import { render } from "@calblueprint/react-blessed";
 import App from "./components/App";
 
 const path = require("path");
