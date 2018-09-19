@@ -47,15 +47,13 @@ class RequestDetail extends Component {
     const { params, activeRecords, renderings } = data;
 
     return (
-      <box top={top} height={height} left="0" width="100%">
+      <box top={top} height={height} left="50%" width="50%">
         <text
           top={0}
           height="100%"
-          left={0}
           width="100%"
           border={{ type: "line" }}
           style={boxStyle}
-          focused={true}
           scrollable={true}
           mouse={false}
           keys={true}
@@ -63,9 +61,9 @@ class RequestDetail extends Component {
         >
           {this.renderDetail(mode, data)}
         </text>
-        <box top={0} height={1} left={2} width={itemSize * items.length + items.length + 1}>
+        {/*<box top={0} height={1} left={2} width={itemSize * items.length + items.length + 1}>
           |{this.renderTabs(1, mode)}
-        </box>
+        </box>*/}
       </box>
     );
   }

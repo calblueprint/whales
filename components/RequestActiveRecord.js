@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import StyledRow from "./StyledRow";
-import formatter from "../formatter";
+import formatter from "../utils/formatter";
 
 const typeStyle = { fg: "magenta", bold: true, align: "right" };
 const durationStyle = { fg: "yellow" };

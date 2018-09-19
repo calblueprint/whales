@@ -6,9 +6,7 @@ const header = ["date", "status", "method", "url"];
 
 const containerOptions = {
   ref: "table",
-  mouse: false,
   border: { type: "line" },
-  width: "100%",
   // padding: { left: 1, right: 1 },
   style: { border: { fg: "white" } }
 };
@@ -66,18 +64,32 @@ const row = (data, i, selectedNo) => {
 };
 
 class RequestList extends Component {
+  componentDidUpdate() {
+    if (this.refs.table) {
+      this.refs.table.on("click", () => {
+        if (this.refs.table.screen.focused !== this.refs.table) {
+          this.refs.table.focus();
+        }
+      });
+    }
+  }
+
   render() {
-    const { top, height, onKeypress, showDetail, data, selectedNo } = this.props;
+    const { top, height, width, onKeypress, showDetail, data, selectedNo } = this.props;
 
     return (
       <box
         top={top}
         keys={!showDetail}
+        width={width}
+        left="50%"
         height={height + 2}
         scrollable={!showDetail}
         onKeypress={onKeypress}
         focused={!showDetail}
         {...containerOptions}
+        style={{ border: { fg: "white" }, focus: { border: { fg: "green" } }}}
+        label="Request log"
       >
         <box height="100%-2" width="100%-2">
           {data.map((record, i) => row(record, i, selectedNo))}

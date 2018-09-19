@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import formatter from "../formatter";
+import formatter from "../utils/formatter";
 
 const labelStyle = { fg: "magenta", bold: true };
 

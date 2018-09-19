@@ -1,16 +1,16 @@
 import _ from "lodash";
 import events from "events";
 import React, { Component } from "react";
-import LogListener from "../LogListener";
+import LogListener from "../utils/LogListener";
 import Booting from "./Booting";
 import ServerInfo from "./ServerInfo";
 import RequestList from "./RequestList";
 import RequestDetail from "./RequestDetail";
+import Termbox from "./Termbox";
 
 const eventEmitter = new events.EventEmitter();
 
 const containerOptions = {
-  mouse: false,
   scrollable: false,
   width: "100%"
 };
@@ -203,19 +203,37 @@ class App extends Component {
       mode: detailMode
     };
     const focused = !showDetail;
-
     return (
-      <box {...containerOptions} onResize={this.setMaxRow}>
-        <ServerInfo top={0} height={1} {...serverInfo} />
+      <box width="100%" onResize={this.setMaxRow}>
+        <ServerInfo
+          top={0}
+          height={1}
+          publicUrl={this.props.publicUrl}
+          {...serverInfo}
+        />
+        <Termbox
+          locationArgs={this.props.locationArgs}
+          positions={{ top: 1, height: "100%-1" }}
+          label="Terminal"
+        />
         <RequestList
           top={1}
+          left="50%"
           height={currentRow}
+          width="50%"
           onKeypress={this.onKeypress}
           showDetail={showDetail}
           data={requests}
           selectedNo={selectedIndex - currentRangeStart}
         />
-        {showDetail && <RequestDetail onKeypress={this.onKeypress} ref="detail" {...detailProps} />}
+        {
+          showDetail &&
+          <RequestDetail
+            onKeypress={this.onKeypress}
+            ref="detail"
+            {...detailProps}
+          />
+        }
       </box>
     );
   }

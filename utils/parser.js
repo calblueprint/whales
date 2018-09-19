@@ -75,11 +75,11 @@ const PROCESSOR = {
     serverInfo = { webServer: ret[1] };
   },
   [RAILS]: line => {
-    let ret = line.match(/=> Rails (\S+) .+ on (\S+)/);
+    let ret = line.match(/=> Rails (\S+)/);
 
     if (!ret) return;
 
-    Object.assign(serverInfo, { railsVersion: ret[1], url: ret[2] });
+    Object.assign(serverInfo, { railsVersion: ret[1] });
   },
   [VERSION]: line => {
     let ret = line.match(/Version (\S+) \(ruby (\S+)\)/);

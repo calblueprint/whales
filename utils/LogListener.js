@@ -15,6 +15,8 @@ class LogListener {
 
   stderr(data) {
     this.eventEmitter.emit("error", data.toString().trim());
+    const ret = parse(data);
+    if (ret) this.eventEmitter.emit(ret.type, ret.data);
   }
 }
 
