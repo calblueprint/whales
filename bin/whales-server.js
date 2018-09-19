@@ -13,8 +13,8 @@ const spawn = require("cross-spawn");
 const ngrok = require("ngrok");
 
 // For now, this is just the Rails server spin-up
-const command = "unbuffer";
-const workingDir = path.resolve("../whales-docker");
+const command = process.platform === "win32" ? "unbuffer" : "docker-compose";
+const workingDir = path.resolve(".");
 
 const locationArgs = [
   "-f",
@@ -24,7 +24,6 @@ const locationArgs = [
 const PORT = process.env.PORT || 1337;
 
 const args = [
-  "docker-compose",
   ...locationArgs,
   "run",
   "-v",
@@ -41,6 +40,10 @@ const args = [
   "-b",
   "0.0.0.0",
 ];
+
+if (command === "unbuffer") {
+  args.unshift("docker-compose");
+}
 
 console.log(`Running ${command} ${args.join(" ")}`);
 

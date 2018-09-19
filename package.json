@@ -11,6 +11,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
     "chalk": "^2.4.1",
+    "commander": "^2.18.0",
     "cross-spawn": "^6.0.5",
     "lodash": "^4.17.10",
     "ngrok": "^3.0.1",
@@ -30,7 +31,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "whales": "./bin/main.js"
+    "whales": "./bin/whales.js"
   },
   "author": "Ethan Lee",
   "license": "ISC"
