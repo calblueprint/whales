@@ -1,7 +1,7 @@
 {
   "name": "@calblueprint/whales",
   "version": "0.1.0",
-  "description": "",
+  "description": "A friendlier Docker environment for Rails",
   "main": "./bin/main.js",
   "dependencies": {
     "@calblueprint/blessed": "^0.1.81",
@@ -35,5 +35,13 @@
     "whales": "./bin/whales.js"
   },
   "author": "Ethan Lee",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calblueprint/whales.git"
+  },
+  "bugs": {
+    "url": "https://github.com/calblueprint/whales/issues"
+  },
+  "homepage": "https://github.com/calblueprint/whales#readme"
 }
