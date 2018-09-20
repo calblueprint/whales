@@ -31,7 +31,8 @@
   "scripts": {
     "compile": "babel --presets=env,react,stage-0 -d dist/ src/",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node ./bin/whales-setup.js"
+    "postinstall": "node ./bin/whales-setup.js",
+    "prepublish": "npm run compile"
   },
   "bin": {
     "whales": "./bin/whales.js"

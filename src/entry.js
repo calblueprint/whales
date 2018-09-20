@@ -76,6 +76,7 @@ const main = (info) => {
   render(
     <App
       railsProc={railsProc}
+      mainProc={process}
       locationArgs={locationArgs}
       publicUrl={publicUrl}
       quitFunc={quitWhales}

@@ -203,6 +203,10 @@ class App extends Component {
       mode: detailMode
     };
     const focused = !showDetail;
+
+    const { railsProc, mainProc } = this.props;
+    railsProc.stdout.unpipe(mainProc.stdout);
+    railsProc.stderr.unpipe(mainProc.stderr);
     return (
       <box width="100%" onResize={this.setMaxRow}>
         <ServerInfo
