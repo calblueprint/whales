@@ -59,6 +59,7 @@ const runWhales = (ngrokUrl) => {
   require(entrypoint)({
     proc: railsProc,
     publicUrl: ngrokUrl || "OFFLINE",
+    port: PORT,
     locationArgs
   });
 }

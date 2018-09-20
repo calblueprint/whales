@@ -48,7 +48,7 @@ const main = (info) => {
   }
 
   // Render Dashboard
-  const { proc: railsProc, publicUrl } = info;
+  const { proc: railsProc, publicUrl, port } = info;
   railsProc.stdout.pipe(process.stdout);
   railsProc.stderr.pipe(process.stderr);
   railsProc.on("exit", (code) => {
@@ -80,6 +80,7 @@ const main = (info) => {
       locationArgs={locationArgs}
       publicUrl={publicUrl}
       quitFunc={quitWhales}
+      port={port}
     />,
     screen
   );

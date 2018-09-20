@@ -8,6 +8,7 @@ import RequestList from "./RequestList";
 import RequestDetail from "./RequestDetail";
 import Termbox from "./Termbox";
 
+const opn = require('opn');
 const eventEmitter = new events.EventEmitter();
 
 const containerOptions = {
@@ -207,6 +208,8 @@ class App extends Component {
     const { railsProc, mainProc } = this.props;
     railsProc.stdout.unpipe(mainProc.stdout);
     railsProc.stderr.unpipe(mainProc.stderr);
+    opn(`http://localhost:${this.props.port}`);
+
     return (
       <box width="100%" onResize={this.setMaxRow}>
         <ServerInfo
