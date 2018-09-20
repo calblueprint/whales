@@ -3,7 +3,7 @@
 const program = require("commander");
 
 program
-  .version("0.1.0")
+  .version("0.1.1")
   .command("server", "start a Whales server for the project in this directory")
     .alias("s")
   .command("new", "create a new Whales project in this directory")
