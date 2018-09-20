@@ -13,7 +13,7 @@ const spawn = require("cross-spawn");
 const ngrok = require("ngrok");
 
 // For now, this is just the Rails server spin-up
-const command = process.platform === "win32" ? "unbuffer" : "docker-compose";
+const command = process.platform === "win32" ? "docker-compose" : "unbuffer";
 const workingDir = path.resolve(".");
 
 const locationArgs = [
