@@ -7,11 +7,11 @@ const path = require("path");
 let folder, template;
 
 program
-  .usage("<foldername> [template]")
-  .arguments("<foldername> [template]")
-  .action((folderName, template) => {
+  .usage("<foldername> [username/gitrepo]")
+  .arguments("<foldername> [username/gitrepo]")
+  .action((folderName, templateName) => {
      folder = folderName;
-     template = template;
+     template = templateName;
   })
   .parse(process.argv);
 
