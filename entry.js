@@ -12,11 +12,15 @@ const screen = blessed.screen({
   title: "Ruby on Whales Server"
 });
 
+let closing = false;
+
 const main = (info) => {
   // Setup process cleanup on exit
   const { locationArgs } = info;
   screen.enableInput();
-  screen.key(["C-x"], function(ch, key) {
+  screen.key(["C-x"], quitWhales);
+  function quitWhales() {
+    closing = true;
     const down = spawn("docker-compose", [
       ...locationArgs,
       "down",
@@ -37,15 +41,40 @@ const main = (info) => {
     down.on("close", () => {
       return process.exit(0);
     });
-  });
+  }
 
   // Render Dashboard
   const { proc: railsProc, publicUrl } = info;
+  railsProc.stdout.pipe(process.stdout);
+  railsProc.stderr.pipe(process.stderr);
+  railsProc.on("exit", (code) => {
+    if (code === null) return;
+    if (code !== 0 && !closing) {
+      const exitingPrompt = blessed.loading({
+        border: "line",
+        top: "center",
+        left: "center",
+        height: "half",
+        width: "half",
+        label: "Whales encountered a startup error",
+        align: "center",
+        parent: screen
+      });
+      exitingPrompt.load(
+        `\n\n\n\n(ERR: ${code}) There was an error starting Whales.\n\n`
+        + "Make sure you're running this inside a Whales project!\n\n"
+        + "Closing in 5 seconds..."
+      );
+      setTimeout(() => process.exit(code), 5000);
+    }
+  });
+
   render(
     <App
       railsProc={railsProc}
       locationArgs={locationArgs}
       publicUrl={publicUrl}
+      quitFunc={quitWhales}
     />,
     screen
   );
