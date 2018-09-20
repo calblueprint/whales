@@ -10,7 +10,7 @@ require("babel-register")({
 
 const path = require("path");
 const spawn = require("cross-spawn");
-const ngrok = require("ngrok");
+const ngrok = require("@calblueprint/ngrok");
 
 // For now, this is just the Rails server spin-up
 const command = process.platform === "win32" ? "docker-compose" : "unbuffer";
@@ -47,9 +47,7 @@ if (command === "unbuffer") {
 
 console.log(`Running ${command} ${args.join(" ")}`);
 
-const railsProc = spawn(command, args, {
-});
-railsProc.stderr.on("data", (data) => console.log(`err: ${data}`));
+const railsProc = spawn(command, args, {});
 
 const runWhales = (ngrokUrl) => {
   require("../entry")({
