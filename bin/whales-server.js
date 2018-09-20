@@ -1,13 +1,5 @@
 #!/usr/bin/env node
 
-require("babel-register")({
-  presets: [["env", {
-    targets: {
-      node: "current"
-    }
-  }], "react", "stage-0"]
-});
-
 const path = require("path");
 const spawn = require("cross-spawn");
 const ngrok = require("@calblueprint/ngrok");
@@ -50,7 +42,21 @@ console.log(`Running ${command} ${args.join(" ")}`);
 const railsProc = spawn(command, args, {});
 
 const runWhales = (ngrokUrl) => {
-  require("../entry")({
+  let entrypoint;
+  if (process.env.BABEL_ENV === "development") {
+    require("babel-register")({
+      presets: [["env", {
+        targets: {
+          node: "current"
+        }
+      }], "react", "stage-0"]
+    });
+    entrypoint = "../src/entry";
+  } else {
+    entrypoint = "../dist/entry";
+  }
+
+  require(entrypoint)({
     proc: railsProc,
     publicUrl: ngrokUrl || "OFFLINE",
     locationArgs

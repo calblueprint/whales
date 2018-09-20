@@ -1,3 +1,7 @@
+if (process.env.BABEL_ENV === "development") {
+  console.log("Loading from source!");
+}
+
 import React from "react";
 import blessed from "@calblueprint/blessed";
 import { render } from "@calblueprint/react-blessed";
