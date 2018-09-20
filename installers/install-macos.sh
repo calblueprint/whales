@@ -4,5 +4,4 @@ if [[ $? != 0 ]] ; then
 fi
 brew update
 brew cask install docker
-brew install expect node@8
-brew link node@8 --force --overwrite
+brew install expect node
