@@ -7,9 +7,7 @@ if [[ $? != 0 ]] ; then
 fi
 echo "Updating Homebrew..."
 brew update
-echo "Installing Docker.app..."
-brew cask install docker
-echo "Launching Docker.app... once this opens, you don't have to login or signup."
-open -a /Applications/Docker.app
+echo "Installing Docker Toolbox..."
+brew cask install docker-toolbox
 echo "Installing expect..."
 brew install expect
