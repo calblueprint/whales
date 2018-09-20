@@ -5,6 +5,7 @@
   "main": "./bin/main.js",
   "dependencies": {
     "@calblueprint/blessed": "^0.1.81",
+    "@calblueprint/ngrok": "^3.0.1",
     "@calblueprint/react-blessed": "^0.3.2",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
@@ -14,7 +15,6 @@
     "commander": "^2.18.0",
     "cross-spawn": "^6.0.5",
     "lodash": "^4.17.10",
-    "ngrok": "^3.0.1",
     "node-pty": "^0.7.7",
     "react": "^16.4.0",
     "react-spring": "^5.3.8",
