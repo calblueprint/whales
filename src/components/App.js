@@ -31,6 +31,7 @@ const initialState = {
 };
 
 const allRequests = [];
+let openedInBrowser = false;
 
 class App extends Component {
   constructor(props) {
@@ -48,14 +49,21 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const listener = new LogListener(eventEmitter);
-    this.props.railsProc.stdout.on("data", listener.stdout);
-    this.props.railsProc.stderr.on("data", listener.stderr);
+    this.listener = new LogListener(eventEmitter);
+    this.props.railsProc.stdout.on("data", this.listener.stdout);
+    this.props.railsProc.stderr.on("data", this.listener.stderr);
     this.setMaxRow();
   }
 
   onRailsStarted(serverInfo) {
     this.setState({ serverInfo });
+    const { railsProc, mainProc } = this.props;
+    railsProc.stdout.unpipe();
+    railsProc.stderr.unpipe();
+    railsProc.stdout.on("data", this.listener.stdout);
+    railsProc.stderr.on("data", this.listener.stderr);
+    railsProc.stdout.resume();
+    railsProc.stderr.resume();
   }
 
   onRailsRequested(data) {
@@ -205,10 +213,10 @@ class App extends Component {
     };
     const focused = !showDetail;
 
-    const { railsProc, mainProc } = this.props;
-    railsProc.stdout.unpipe(mainProc.stdout);
-    railsProc.stderr.unpipe(mainProc.stderr);
-    opn(`http://localhost:${this.props.port}`);
+    if (!openedInBrowser) {
+      openedInBrowser = true;
+      opn(`http://localhost:${this.props.port}`);
+    }
 
     return (
       <box width="100%" onResize={this.setMaxRow}>
