@@ -7,7 +7,12 @@ if [[ $? != 0 ]] ; then
 fi
 echo "Updating Homebrew..."
 brew update
-echo "Installing Docker Toolbox..."
-brew cask install docker-toolbox
+
+which -s docker
+if [[ $? != 0 ]] ; then
+  echo "Installing Docker Toolbox..."
+  brew cask install docker-toolbox
+fi
+
 echo "Installing expect..."
 brew install expect
