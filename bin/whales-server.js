@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require("fs");
 const path = require("path");
 const spawn = require("cross-spawn");
 const ngrok = require("@calblueprint/ngrok");
@@ -64,9 +65,37 @@ const runWhales = (ngrokUrl) => {
   });
 }
 
-const ngrokProc = ngrok.connect(PORT)
+const cleanup = () => {
+  const down = spawn("docker-compose", [
+    ...locationArgs,
+    "down",
+  ]);
+  return new Promise((resolve, reject) => {
+    down.on("close", () => {
+      console.log("Successfully cleaned up.");
+      fs.unlink(path.join(workingDir, "tmp/pids/server.pid"), (err) => {
+        resolve();
+      });
+    });
+  });
+};
+
+cleanup()
+  .then(ngrok.connect(PORT))
   .then(runWhales)
   .catch(() => runWhales());
+
+const SIGNALS = [
+  'SIGHUP', 'SIGINT', 'SIGQUIT',
+  'SIGILL', 'SIGTRAP', 'SIGABRT',
+  'SIGBUS', 'SIGFPE', 'SIGUSR1',
+  'SIGSEGV', 'SIGUSR2', 'SIGTERM'
+];
+SIGNALS.forEach((sig) => {
+  process.on(sig, function () {
+    cleanup(sig).then(() => process.exit(0));
+  });
+});
 
 // Process cleanup
 process.on("exit", () => {

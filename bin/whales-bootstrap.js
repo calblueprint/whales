@@ -11,7 +11,7 @@ const locationArgs = [
   path.join(workingDir, "docker-compose.yml")
 ];
 
-const args = [...locationArgs, "build", "web"];
+const args = [...locationArgs, "build", "web", "spring"];
 
 console.log(`Running ${command} ${args.join(" ")}`);
 console.log("Bootstrap might take a while the first time it is run. Please be patient.");

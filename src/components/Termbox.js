@@ -28,7 +28,7 @@ class Termbox extends Component {
         <terminal
           width="50%"
           height="100%"
-          shell={`docker-compose`}
+          shell={process.platform === "win32" ? "docker-compose.exe" : "docker-compose"}
           args={[...this.props.locationArgs, "run", "web", "/bin/bash"]}
           keys={true}
           border={{ type: "line" }}

@@ -118,7 +118,13 @@ const PROCESSOR = {
     let ret = line.match(/Parameters: (.+)$/);
     if (!ret) return;
 
-    const params = JSON.parse(ret[1].replace(/=>/g, ":").replace(/nil/g, '"nil"'));
+    let params;
+    try {
+      params = JSON.parse(ret[1].replace(/=>/g, ":").replace(/nil/g, '"nil"'));
+    } catch (err) {
+      // TODO: There is some case here where Active Storage params breaks this.
+      return;
+    }
 
     Object.assign(processInfo, { params: formatParams(params) });
   },
