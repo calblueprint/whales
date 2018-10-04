@@ -1,6 +1,6 @@
 {
   "name": "@calblueprint/whales",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "A friendlier Docker environment for Rails",
   "main": "./bin/main.js",
   "dependencies": {
@@ -10,11 +10,14 @@
     "chalk": "^2.4.1",
     "commander": "^2.18.0",
     "cross-spawn": "^6.0.5",
+    "express": "^4.16.3",
     "lodash": "^4.17.10",
     "node-pty": "^0.7.7",
     "opn": "^5.4.0",
     "react": "^16.4.0",
     "react-spring": "^5.3.8",
+    "rimraf": "^2.6.2",
+    "socket.io": "^2.1.1",
     "term.js": "0.0.7",
     "ws": "^5.2.0"
   },

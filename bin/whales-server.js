@@ -6,8 +6,10 @@ const spawn = require("cross-spawn");
 const ngrok = require("@calblueprint/ngrok");
 
 // For now, this is just the Rails server spin-up
-const command = process.platform === "win32" ? "docker-compose" : "unbuffer";
+
+let command = process.platform === "win32" ? "docker-compose" : "unbuffer";
 const workingDir = path.resolve(".");
+const projVersion = path.join(workingDir, ".whales-version");
 
 const locationArgs = [
   "-f",
@@ -34,6 +36,14 @@ const args = [
   "0.0.0.0",
 ];
 
+// Whales project version >= 0.1.7
+if (fs.existsSync(projVersion)) {
+  // For 0.2, only allow versioned projects and
+  // offer migration instructions
+  command = "docker-compose";
+  args.splice(args.indexOf("web") + 1, 0, "unbuffer");
+}
+
 if (command === "unbuffer") {
   args.unshift("docker-compose");
 }
@@ -43,6 +53,7 @@ console.log(`Running ${command} ${args.join(" ")}`);
 const railsProc = spawn(command, args, {});
 
 const runWhales = (ngrokUrl) => {
+  console.log(`ngrok URL: ${ngrokUrl}`);
   let entrypoint;
   if (process.env.BABEL_ENV === "development") {
     require("babel-register")({
@@ -81,9 +92,13 @@ const cleanup = () => {
 };
 
 cleanup()
-  .then(ngrok.connect(PORT))
+  .then(() => ngrok.connect(PORT))
   .then(runWhales)
-  .catch(() => runWhales());
+  .catch((e) => {
+    console.log("Starting Whales in offline mode...");
+    console.log(e);
+    runWhales();
+  });
 
 const SIGNALS = [
   'SIGHUP', 'SIGINT', 'SIGQUIT',

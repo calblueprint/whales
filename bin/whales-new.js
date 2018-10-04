@@ -3,6 +3,7 @@
 const program = require("commander");
 const spawn = require("cross-spawn");
 const path = require("path");
+const rm = require("rimraf");
 
 let folder, template;
 
@@ -25,7 +26,7 @@ if (!template) {
 }
 
 const cloneProc = spawn("git", [
-  "clone", `https://github.com/${template}.git`, folder
+  "clone", "--depth=1", `https://github.com/${template}.git`, folder
 ], {});
 cloneProc.stdout.pipe(process.stdout);
 cloneProc.stderr.pipe(process.stderr);
@@ -33,6 +34,13 @@ cloneProc.stderr.pipe(process.stderr);
 cloneProc.on("exit", (code) => {
   if (code === null) return;
   if (code === 0) {
+    rm.sync(`${folder}/.git`, {}, (err) => {
+      if (err) {
+        console.log("There was an issue removing git history.");
+        console.log("You may need to manually change remotes.");
+        console.log(err);
+      }
+    });
     const buildImageProc = spawn("docker-compose", [
       "-f", `${folder}/docker-compose.yml`, "build", "web", "db", "spring"
     ], {});
@@ -49,7 +57,7 @@ cloneProc.on("exit", (code) => {
         "web",
         "/bin/bash",
         "-c",
-        `"sleep 5s && rails db:create"`
+        `"sleep 10s && rails db:create"`
       ], { shell: true });
       dbCreateProc.stdout.pipe(process.stdout);
       dbCreateProc.stderr.pipe(process.stderr);
