@@ -1,6 +1,6 @@
 {
   "name": "@calblueprint/whales",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A friendlier Docker environment for Rails",
   "main": "./bin/main.js",
   "dependencies": {

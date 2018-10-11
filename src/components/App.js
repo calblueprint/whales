@@ -157,6 +157,7 @@ class App extends Component {
         p: _.partial(this.changeMode, "params").bind(this),
         a: _.partial(this.changeMode, "activerecord").bind(this),
         r: _.partial(this.changeMode, "rendering").bind(this),
+        t: this.term.focus.bind(this.term),
         space: this.movePage.bind(this),
         enter: _.partial(this.showDetail, true).bind(this),
         escape: _.partial(this.showDetail, false).bind(this)
@@ -230,6 +231,10 @@ class App extends Component {
           locationArgs={this.props.locationArgs}
           positions={{ top: 1, height: "100%-1" }}
           label="Terminal"
+          ref={(ref) => {
+            if (this.term) return;
+            this.term = ref;
+          }}
         />
         <RequestList
           top={1}

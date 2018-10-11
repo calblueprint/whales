@@ -74,7 +74,11 @@ const main = (info) => {
     }
   });
 
-  startServer(locationArgs);
+  try {
+    startServer(locationArgs);
+  } catch (e) {
+    // It's okay if the console server quits for now
+  }
 
   render(
     <App
