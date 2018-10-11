@@ -25,8 +25,9 @@ if (!template) {
   template = "calblueprint/whales-docker";
 }
 
+const gitRemote = `https://github.com/${template}.git`;
 const cloneProc = spawn("git", [
-  "clone", "--depth=1", `https://github.com/${template}.git`, folder
+  "clone", "--depth=1", gitRemote, folder
 ], {});
 cloneProc.stdout.pipe(process.stdout);
 cloneProc.stderr.pipe(process.stderr);
@@ -34,13 +35,12 @@ cloneProc.stderr.pipe(process.stderr);
 cloneProc.on("exit", (code) => {
   if (code === null) return;
   if (code === 0) {
-    rm.sync(`${folder}/.git`, {}, (err) => {
-      if (err) {
-        console.log("There was an issue removing git history.");
-        console.log("You may need to manually change remotes.");
-        console.log(err);
-      }
-    });
+    const gitProcOpts = {
+      cwd: path.join(process.cwd(), folder)
+    };
+    const rmOrigin = spawn.sync("git", ["remote", "rm", "origin"], gitProcOpts);
+    const addUpstream = spawn.sync("git", ["remote", "add", "upstream", gitRemote], gitProcOpts);
+
     const buildImageProc = spawn("docker-compose", [
       "-f", `${folder}/docker-compose.yml`, "build", "web", "db", "spring"
     ], {});
