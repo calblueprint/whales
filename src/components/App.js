@@ -216,7 +216,20 @@ class App extends Component {
 
     if (!openedInBrowser) {
       openedInBrowser = true;
-      opn(`http://localhost:${this.props.port}`);
+      try {
+        if (
+          process.env.DOCKER_HOST
+          && process.env.DOCKER_MACHINE_NAME
+          && process.env.DOCKER_TLS_VERIFY
+          && process.env.DOCKER_CERT_PATH
+        ) {
+          opn(`http://192.168.99.100:${this.props.port}`);
+        } else {
+          opn(`http://localhost:${this.props.port}`);
+        }
+      } catch (e) {
+        // TODO: Add messaging about opening URL manually
+      }
     }
 
     return (

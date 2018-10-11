@@ -15,7 +15,7 @@ module.exports = (locationArgs) => {
     wss.handleUpgrade(request, socket, head, (ws) => {
       let wsPipe = (data) => ws.send(data);
       let termProc = pty.spawn(
-        "docker-compose",
+        process.platform === "win32" ? "docker-compose.exe" : "docker-compose",
         [...locationArgs, "run", "web", "/bin/bash"],
         { name: "xterm", cwd: process.env.PWD, env: process.env }
       );

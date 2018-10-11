@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const spawn = require("cross-spawn");
-const ngrok = require("@calblueprint/ngrok");
+const ngrok = require("ngrok");
 
 // For now, this is just the Rails server spin-up
 
