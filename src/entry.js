@@ -9,6 +9,7 @@ import App from "./components/App";
 
 const path = require("path");
 const spawn = require("cross-spawn");
+const startServer = require("./web/server");
 
 const screen = blessed.screen({
   autoPadding: true,
@@ -72,6 +73,8 @@ const main = (info) => {
       setTimeout(() => process.exit(code), 5000);
     }
   });
+
+  startServer(locationArgs);
 
   render(
     <App

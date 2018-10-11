@@ -50,9 +50,8 @@ if (command === "unbuffer") {
 
 console.log(`Running ${command} ${args.join(" ")}`);
 
-const railsProc = spawn(command, args, {});
-
 const runWhales = (ngrokUrl) => {
+  const railsProc = spawn(command, args, {});
   console.log(`ngrok URL: ${ngrokUrl}`);
   let entrypoint;
   if (process.env.BABEL_ENV === "development") {
@@ -73,6 +72,14 @@ const runWhales = (ngrokUrl) => {
     publicUrl: ngrokUrl || "OFFLINE",
     port: PORT,
     locationArgs
+  });
+
+  // Process cleanup
+  process.on("exit", () => {
+    try {
+      process.kill(process.platform === "win32" ? railsProc.pid : -railsProc.pid);
+    } catch (e) {
+    }
   });
 }
 
@@ -110,12 +117,4 @@ SIGNALS.forEach((sig) => {
   process.on(sig, function () {
     cleanup(sig).then(() => process.exit(0));
   });
-});
-
-// Process cleanup
-process.on("exit", () => {
-  try {
-    process.kill(process.platform === "win32" ? railsProc.pid : -railsProc.pid);
-  } catch (e) {
-  }
 });

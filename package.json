@@ -12,14 +12,14 @@
     "cross-spawn": "^6.0.5",
     "express": "^4.16.3",
     "lodash": "^4.17.10",
-    "node-pty": "^0.7.7",
+    "node-pty": "^0.7.8",
     "opn": "^5.4.0",
     "react": "^16.4.0",
     "react-spring": "^5.3.8",
     "rimraf": "^2.6.2",
-    "socket.io": "^2.1.1",
     "term.js": "0.0.7",
-    "ws": "^5.2.0"
+    "ws": "^5.2.2",
+    "xterm": "^3.7.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -27,13 +27,14 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
+    "browserify": "^16.2.3",
     "object-assign": "^4.1.1",
     "prop-types": "^15.6.2",
     "react-reconciler": "^0.12.0",
     "regenerator-runtime": "^0.12.1"
   },
   "scripts": {
-    "compile": "babel --presets=env,react,stage-0 -d dist/ src/",
+    "compile": "babel src --presets=env,react,stage-0 --out-dir dist/ --copy-files && browserify dist/web/public/terminal.js -o dist/web/public/terminal.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "node ./bin/whales-setup.js",
     "prepublish": "npm run compile"
