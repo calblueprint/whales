@@ -22,12 +22,12 @@ if (!folder) {
 }
 
 if (!template) {
-  template = "calblueprint/whales-docker";
+  template = "calblueprint/whales-snap";
 }
 
 const gitRemote = `https://github.com/${template}.git`;
 const cloneProc = spawn("git", [
-  "clone", "--depth=1", gitRemote, folder
+  "clone", gitRemote, folder
 ], {});
 cloneProc.stdout.pipe(process.stdout);
 cloneProc.stderr.pipe(process.stderr);
@@ -50,6 +50,7 @@ cloneProc.on("exit", (code) => {
     buildImageProc.on("exit", (code) => {
       if (code === null) return;
 
+      console.log("Creating a fresh new database...this may take a few seconds.");
       const dbCreateProc = spawn("docker-compose", [
         "-f",
         `${folder}/docker-compose.yml`,
@@ -57,7 +58,7 @@ cloneProc.on("exit", (code) => {
         "web",
         "/bin/bash",
         "-c",
-        `"sleep 10s && rails db:create"`
+        `"sleep 5s && rails db:create"`
       ], { shell: true });
       dbCreateProc.stdout.pipe(process.stdout);
       dbCreateProc.stderr.pipe(process.stderr);

@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const spawn = require("cross-spawn");
 const ngrok = require("ngrok");
+const startServer = require("../src/web/server");
 
 // For now, this is just the Rails server spin-up
 
@@ -67,12 +68,14 @@ const runWhales = (ngrokUrl) => {
     entrypoint = "../dist/entry";
   }
 
-  require(entrypoint)({
-    proc: railsProc,
-    publicUrl: ngrokUrl || "OFFLINE",
-    port: PORT,
-    locationArgs
-  });
+  startServer(locationArgs);
+
+  // require(entrypoint)({
+  //   proc: railsProc,
+  //   publicUrl: ngrokUrl || "OFFLINE",
+  //   port: PORT,
+  //   locationArgs
+  // });
 
   // Process cleanup
   process.on("exit", () => {

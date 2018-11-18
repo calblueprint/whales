@@ -1,33 +1,48 @@
 const path = require('path');
-const pty = require('node-pty');
+const next = require('next');
+const url = require('url');
+
+// Import WS servers
+const consoleServer = require('./console-ws');
+const statusServer = require('./status-ws');
 
 module.exports = (locationArgs) => {
   const express = require('express');
   const app = express();
-  const server = require('http').Server(app);
-
-  const WebSocket = require('ws');
-  const wss = new WebSocket.Server({ noServer: true });
-
-  console.log("Now listening on port 7331...");
-  server.listen(7331);
-  server.on('upgrade', (request, socket, head) => {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-      let wsPipe = (data) => ws.send(data);
-      let termProc = pty.spawn(
-        process.platform === "win32" ? "docker-compose.exe" : "docker-compose",
-        [...locationArgs, "run", "web", "/bin/bash"],
-        { name: "xterm", cwd: process.env.PWD, env: process.env }
-      );
-      termProc.on('data', wsPipe);
-
-      ws.on('message', (msg) => termProc.write(msg));
-      ws.on('close', () => {
-        termProc.kill();
-      });
-      wss.emit('connection', ws, request);
-    });
+  const nextApp = next({
+    dev: process.env.BABEL_ENV === 'development',
+    dir: __dirname
   });
 
   app.use(express.static(path.join(__dirname, 'public')));
+
+  const nextHandler = nextApp.getRequestHandler();
+  app.get('*', (req, res) => {
+    return nextHandler(req, res);
+  });
+
+  const server = require('http').Server(app);
+  server.on('upgrade', (request, socket, head) => {
+    const pathname = url.parse(request.url).pathname;
+    let wss;
+    switch (pathname) {
+      case '/console':
+        wss = consoleServer(locationArgs);
+        break;
+      case '/status':
+        wss = statusServer;
+        break;
+      default:
+        wss = {
+          handleUpgrade: () => console.log("Invalid request sent to WebSockets server.")
+        };
+    }
+
+    wss.handleUpgrade(request, socket, head);
+  });
+
+  nextApp.prepare().then(() => {
+    console.log("Now listening on port 7331...");
+    server.listen(7331);
+  });
 };

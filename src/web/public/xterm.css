@@ -1,5 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700');
+
+#terminal {
+    background-color: black;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
 .xterm {
-    font-family: courier-new, courier, monospace;
+    font-family: "Inconsolata", courier-new, courier, monospace;
     font-feature-settings: "liga" 0;
     position: relative;
     user-select: none;
@@ -64,6 +73,7 @@
     left: 0;
     top: 0;
     bottom: 0;
+    padding: 20px;
 }
 
 .xterm .xterm-screen {
