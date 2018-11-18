@@ -3,7 +3,7 @@ import { Terminal } from 'xterm';
 import * as attach from 'xterm/lib/addons/attach/attach';
 import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
 import * as fit from 'xterm/lib/addons/fit/fit';
-import * as FontFaceObserver from 'fontfaceobserver';
+import FontFaceObserver from 'fontfaceobserver';
 
 import '../public/xterm.css';
 

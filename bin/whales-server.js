@@ -4,7 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const spawn = require("cross-spawn");
 const ngrok = require("ngrok");
-const startServer = require("../src/web/server");
+const BASE_PATH = process.env.BABEL_ENV === "development" ? "../src" : "../dist";
+const startServer = require(`${BASE_PATH}/web/server`);
 
 // For now, this is just the Rails server spin-up
 
@@ -42,20 +43,7 @@ console.log(`Running ${command} ${args.join(" ")}`);
 const runWhales = (ngrokUrl) => {
   const railsProc = spawn(command, args, {});
   console.log(`ngrok URL: ${ngrokUrl}`);
-  let entrypoint;
-  if (process.env.BABEL_ENV === "development") {
-    require("babel-register")({
-      presets: [["env", {
-        targets: {
-          node: "current"
-        }
-      }], "react", "stage-0"]
-    });
-    entrypoint = "../src/entry";
-  } else {
-    entrypoint = "../dist/entry";
-  }
-
+  let entrypoint = `${BASE_PATH}/entry`;
   startServer(locationArgs);
 
   // require(entrypoint)({
