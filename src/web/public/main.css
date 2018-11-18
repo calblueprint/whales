@@ -67,3 +67,28 @@ button {
 .console {
   margin-top: 10px;
 }
+
+.logs {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.6);
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: 0.3s ease all;
+}
+
+.logs .terminal {
+  width: 80%;
+}
+
+.hide {
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+}

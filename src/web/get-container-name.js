@@ -4,7 +4,7 @@ let containerName;
 module.exports = function getContainerName (opts = {}) {
   let { skipCache, searchPattern } = opts;
   if (!opts.searchPattern) {
-    searchPattern = "0.0.0.0"
+    searchPattern = "0.0.0.0";
   }
   return new Promise((resolve, reject) => {
     if (containerName && !skipCache) return resolve(containerName);
@@ -23,5 +23,6 @@ module.exports = function getContainerName (opts = {}) {
           resolve(containerName);
         }
       })
-  }); 
+      .catch(reject);
+  });
 }

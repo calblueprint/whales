@@ -2,29 +2,36 @@ import React from 'react';
 import { Terminal } from 'xterm';
 import * as attach from 'xterm/lib/addons/attach/attach';
 import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
+import * as fit from 'xterm/lib/addons/fit/fit';
 import * as FontFaceObserver from 'fontfaceobserver';
 
 import '../public/xterm.css';
 
 export default class Console extends React.Component {
+  constructor(props) {
+    super(props);
+    this.termDiv = React.createRef();
+  }
+
   componentDidMount() {
     const consoleFontRegular = new FontFaceObserver("Inconsolata", { weight: 400 }).load();
     const consoleFontBold = new FontFaceObserver("Inconsolata", { weight: 700 }).load();
     Promise.all([consoleFontRegular, consoleFontBold]).then(() => {
       Terminal.applyAddon(attach);
       Terminal.applyAddon(fullscreen);
+      Terminal.applyAddon(fit);
       var term = new Terminal({
         fontFamily: "Inconsolata",
         fontSize: "16"
       });
-      var socket = new WebSocket('ws://localhost:7331/console');
-
+      var socket = new WebSocket(this.props.wsUrl);
+      term.open(this.termDiv.current);
+      term.fit();
       term.attach(socket);
-      term.open(document.querySelector('#terminal'));
     });
   }
 
   render() {
-    return (<div id="terminal"></div>);
+    return (<div className="terminal" ref={this.termDiv}></div>);
   }
 }

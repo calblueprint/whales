@@ -10,7 +10,8 @@ const startServer = require("../src/web/server");
 
 let command = process.platform === "win32" ? "docker-compose" : "unbuffer";
 const workingDir = path.resolve(".");
-const projVersion = path.join(workingDir, ".whales-version");
+const versionFile = path.join(workingDir, ".whales-version");
+let versionStr;
 
 const locationArgs = [
   "-f",
@@ -18,31 +19,18 @@ const locationArgs = [
 ];
 
 const PORT = process.env.PORT || 1337;
-
-const args = [
-  ...locationArgs,
-  "run",
-  "-v",
-  `${workingDir}:/app`,
-  "-p",
-  `${PORT}:${PORT}`,
-  "web",
-  "bundle",
-  "exec",
-  "rails",
-  "server",
-  "-p",
-  PORT,
-  "-b",
-  "0.0.0.0",
-];
+const args = [...locationArgs, "up", "web"];
 
 // Whales project version >= 0.1.7
-if (fs.existsSync(projVersion)) {
+if (fs.existsSync(versionFile)) {
   // For 0.2, only allow versioned projects and
   // offer migration instructions
+  versionStr = fs.readFileSync(versionFile).toString();
+  console.log("This project is versioned at", versionStr);
   command = "docker-compose";
-  args.splice(args.indexOf("web") + 1, 0, "unbuffer");
+  if (versionStr !== "0.2.0") {
+    args.splice(args.indexOf("web") + 1, 0, "unbuffer");  
+  }
 }
 
 if (command === "unbuffer") {

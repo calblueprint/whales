@@ -5,6 +5,7 @@ const url = require('url');
 // Import WS servers
 const consoleServer = require('./console-ws');
 const statusServer = require('./status-ws');
+const logsServer = require('./logs-ws');
 
 module.exports = (locationArgs) => {
   const express = require('express');
@@ -31,6 +32,9 @@ module.exports = (locationArgs) => {
         break;
       case '/status':
         wss = statusServer;
+        break;
+      case '/logs':
+        wss = logsServer;
         break;
       default:
         wss = {

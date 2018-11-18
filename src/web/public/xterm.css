@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700');
 
-#terminal {
+.terminal {
     background-color: black;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
 }
 

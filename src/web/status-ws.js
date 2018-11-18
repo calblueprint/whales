@@ -16,7 +16,10 @@ module.exports = {
       const catchErrorAndNotify = (err) => {
         // TODO: Should there be a way to distinguish DOWN and ERR states?
         ws.sendPayload(err.name, "DOWN");
-        return Promise.reject(err);
+        if (err.exitCode) {
+          console.log(`==> [err: ${err.exitCode}]`, err);
+        }
+        return err;
       };
 
       if (currentInterval !== null) {
@@ -27,14 +30,14 @@ module.exports = {
         promisifySpawn("docker", ["ps"], {})
           .then((data) => {
             ws.sendPayload("docker", "UP");
-          }, catchErrorAndNotify)
-          .catch(console.log);
+          })
+          .catch(catchErrorAndNotify);
 
         getContainerName({ skipCache: true })
           .then((data) => {
             ws.sendPayload("server", "UP");
-          }, catchErrorAndNotify)
-          .catch(console.log);
+          })
+          .catch(catchErrorAndNotify);
       }, 2000);
 
       ws.on('message', (data) => {
@@ -46,10 +49,15 @@ module.exports = {
         }
         if (data === "DOWN") {
           getContainerName().then((name) => {
+            console.log("==> [info] Stopping container: ", name);
             return promisifySpawn("docker", ["stop", name]);
           }).then(() => {
-            return getContainerName({ searchPattern: "spring server" });
+            return getContainerName({
+              searchPattern: "spring server",
+              skipCache: true,
+            });
           }).then((name) => {
+            console.log("==> [info] Stopping container: ", name);
             return promisifySpawn("docker", ["stop", name]);
           }).catch(console.log);
         }

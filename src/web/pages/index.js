@@ -12,7 +12,7 @@ export default class Index extends React.Component {
     return {
       projectPath: pwd,
       projectName: pwd.split("/").pop(),
-      buttonDisabled: false
+      buttonDisabled: false,
     };
   }
 
@@ -21,6 +21,7 @@ export default class Index extends React.Component {
     this.state = {
       dockerStatus: "",
       serverStatus: "",
+      logsHidden: true,
     };
   }
 
@@ -68,7 +69,11 @@ export default class Index extends React.Component {
               serviceName="Your Rails server"
               serviceStatus={this.state.serverStatus}
             >
-              <button>View logs</button>
+              <button
+                onClick={() => this.setState({ logsHidden: false })}
+              >
+                View logs
+              </button>
               <button
                 disabled={this.state.buttonDisabled}
                 onClick={() => this.toggleServerState()}
@@ -84,7 +89,16 @@ export default class Index extends React.Component {
           </div>
           <div className="console section">
             <h4>Terminal</h4>
-            <Console />
+            <Console wsUrl="ws://localhost:7331/console" />
+            <div className={`logs ${this.state.logsHidden ? "hide" : ""}`}>
+              <Console wsUrl="ws://localhost:7331/logs" />
+              <button
+                style={{ marginTop: "10px" }}
+                onClick={() => this.setState({ logsHidden: true })}
+              >
+                Close logs
+              </button>
+            </div>
           </div>
         </div>
         {/*<div className="column">
