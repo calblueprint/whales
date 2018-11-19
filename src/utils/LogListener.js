@@ -1,5 +1,4 @@
-import _ from "lodash";
-import parse from "./parser";
+const parse = require("./parser");
 
 class LogListener {
   constructor(eventEmitter) {
@@ -20,4 +19,4 @@ class LogListener {
   }
 }
 
-export default LogListener;
+module.exports = LogListener;

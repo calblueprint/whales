@@ -44,14 +44,7 @@ const runWhales = (ngrokUrl) => {
   const railsProc = spawn(command, args, {});
   console.log(`ngrok URL: ${ngrokUrl}`);
   let entrypoint = `${BASE_PATH}/entry`;
-  startServer(locationArgs);
-
-  // require(entrypoint)({
-  //   proc: railsProc,
-  //   publicUrl: ngrokUrl || "OFFLINE",
-  //   port: PORT,
-  //   locationArgs
-  // });
+  startServer(locationArgs, railsProc);
 
   // Process cleanup
   process.on("exit", () => {
@@ -94,6 +87,7 @@ const SIGNALS = [
 ];
 SIGNALS.forEach((sig) => {
   process.on(sig, function () {
+    console.log("Whales is exiting gracefully... please be patient.");
     cleanup(sig).then(() => process.exit(0));
   });
 });

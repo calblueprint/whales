@@ -1,4 +1,4 @@
-import _ from "lodash";
+const _ = require("lodash");
 
 const BOOTING = "BOOTING";
 const RAILS = "RAILS";
@@ -62,7 +62,7 @@ const TYPES = {
   }
 };
 
-let serverInfo;
+let serverInfo = {};
 let processInfo = null;
 let prevProcessInfo = null;
 
@@ -184,11 +184,13 @@ const logType = line => {
 
 const ANSIRegex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 const removeANSIstyles = str => str.replace(ANSIRegex, "");
+const dockerPrefix = /web_\d\s*\|\s/g;
+const removeDockerPrefix = str => str.replace(dockerPrefix, "");
 
 const parse = buffer => {
   const lines = buffer.toString().split("\n");
   const ret = lines.map(line => {
-    const l = removeANSIstyles(line).trim();
+    const l = removeDockerPrefix(removeANSIstyles(line)).trim();
     const type = logType(l);
     let foo = null;
     if (type) {
@@ -202,4 +204,4 @@ const parse = buffer => {
   return _.last(_.compact(ret));
 };
 
-export default parse;
+module.exports = parse;

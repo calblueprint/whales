@@ -22,6 +22,7 @@ export default class Index extends React.Component {
       dockerStatus: "",
       serverStatus: "",
       logsHidden: true,
+      requests: [],
     };
   }
 
@@ -40,6 +41,13 @@ export default class Index extends React.Component {
       this.setState({
         [`${payload.type}Status`]: payload.status
       });
+    });
+
+    this.requestsSocket = new WebSocket("ws://localhost:7331/requests");
+    this.requestsSocket.addEventListener("message", (event) => {
+      const { data } = event;
+      const payload = JSON.parse(data);
+      this.setState({ requests: [...this.state.requests, payload] });
     });
   }
 
@@ -101,11 +109,11 @@ export default class Index extends React.Component {
             </div>
           </div>
         </div>
-        {/*<div className="column">
+        <div className="column">
           <div>
             <h4>Requests Log</h4>
           </div>
-        </div>*/}
+        </div>
       </div>
     </div>);
   }
