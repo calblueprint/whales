@@ -92,3 +92,102 @@ button {
   transform: translateY(100%);
   pointer-events: none;
 }
+
+.message--info {
+  color: rgba(0, 0, 0, 0.3);
+  font-weight: 400;
+}
+
+.message--info a {
+  color: black;
+}
+
+.request__list_container {
+  height: 25vh;
+  overflow-y: scroll;
+}
+
+.request__row {
+  height: 30px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.request__row:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.request__row--selected {
+  background-color: #356FFF;
+  color: white;
+}
+
+.request__row--selected:hover {
+  background-color: #356FFF;
+}
+
+.request__meta {
+  font-family: Inconsolata;
+  font-size: 14pt;
+  flex: 3;
+  display: flex;
+  align-items: center;
+}
+
+.request__ts {
+  font-size: 12pt;
+  flex: 2;
+  text-align: right;
+}
+
+.request__container {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.request__breakdown {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.request__status {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.request__container h2 {
+  font-family: Inconsolata;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.request__block {
+  flex: 1;
+  padding-right: 10px;
+}
+
+.request__container h3 {
+  text-transform: uppercase;
+  font-size: 10pt;
+  font-weight: 900;
+}
+
+.request__block p {
+  font-family: Inconsolata;
+}
+
+.request__log {
+  font-family: Inconsolata;
+  background-color: black;
+  color: white;
+  margin-top: 5px;
+  padding: 15px;
+  border-radius: 10px;
+  max-height: 250px;
+  overflow-y: scroll;
+}

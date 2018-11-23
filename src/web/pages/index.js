@@ -1,11 +1,12 @@
 import React from 'react';
 import Console from '../components/Console';
 import Status from '../components/Status';
+import RequestRow from '../components/RequestRow';
 
 import '../public/reset.css';
 import '../public/main.css';
 
-const pwd = process.env.PWD;
+const pwd = process.cwd();
 
 export default class Index extends React.Component {
   static getInitialProps() {
@@ -23,6 +24,7 @@ export default class Index extends React.Component {
       serverStatus: "",
       logsHidden: true,
       requests: [],
+      currentRequest: null,
     };
   }
 
@@ -59,6 +61,8 @@ export default class Index extends React.Component {
 
   render() {
     const { projectPath, projectName } = this.props;
+    const { currentRequest: req } = this.state;
+
     return (<div className="container">
       <div className="header">
         <h3>🐳 <code>Whales</code></h3>
@@ -112,6 +116,82 @@ export default class Index extends React.Component {
         <div className="column">
           <div>
             <h4>Requests Log</h4>
+            {
+              this.state.requests.length === 0
+              ? <h3 className="message--info">
+                  See your requests by visiting:&nbsp;
+                  <a
+                    href="http://localhost:1337"
+                    target="_blank"
+                  >
+                    http://localhost:1337
+                  </a>
+                </h3>
+              : null
+            }
+            <div className="request__list_container">
+            {this.state.requests.map((req, index) => {
+              return (
+                <RequestRow
+                  onClick={() => this.setState({ currentRequest: req })}
+                  selected={this.state.currentRequest === req}
+                  key={req.date}
+                  {...req}
+                />
+              );
+            })}
+            </div>
+            {
+              req
+              ? <div className="request__container">
+                  <div className="request__status">
+                    <div
+                      className={`status__circle ${Number(req.status) >= 400 
+                        ? "status__circle--error" : "status__circle--success"}`}
+                      style={{ marginRight: "5px" }}
+                    />
+                    <span style={{ fontWeight: 700 }}>
+                      {req.status}
+                    </span>
+                  </div>
+                  <h2>
+                    <span
+                      style={{ fontWeight: 700 }}
+                    >
+                      {req.method}
+                    </span>
+                    &nbsp;{req.url}
+                  </h2>
+                  <div className="request__breakdown">
+                    <div className="request__block">
+                      <h3>Response Time</h3>
+                      <p>{req.respTime}ms</p>
+                    </div>
+                    <div className="request__block">
+                      <h3>Controller</h3>
+                      <p>{req.processor.split("#").shift()}</p>
+                    </div>
+                    <div className="request__block">
+                      <h3>Method</h3>
+                      <p>{req.processor.split("#").pop()}</p>
+                    </div>
+                  </div>
+                  <h3>Params</h3>
+                  <p
+                    style={{
+                      color: "rgba(0, 0, 0, 0.3)",
+                      marginBottom: "10px"
+                    }}
+                  >
+                    No params for this request
+                  </p>
+                  <h3>Full Log</h3>
+                  <div className="request__log">
+                    {req.logs.join("\n")}
+                  </div>
+                </div>
+              : null
+            }
           </div>
         </div>
       </div>

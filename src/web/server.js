@@ -5,6 +5,7 @@ const next = require('next');
 const url = require('url');
 const LogListener = require("../utils/LogListener");
 const events = require("events");
+const spawn = require("cross-spawn");
 
 // Import WS servers
 const consoleServer = require('./console-ws');
@@ -12,7 +13,7 @@ const statusServer = require('./status-ws');
 const logsServer = require('./logs-ws');
 const requestsServer = require('./requests-ws');
 
-module.exports = (locationArgs, railsProc) => {
+module.exports = (locationArgs) => {
   const express = require('express');
   const app = express();
   const nextApp = next({
@@ -30,15 +31,16 @@ module.exports = (locationArgs, railsProc) => {
   // Setup log listener + parser for requests view
   const eventEmitter = new events.EventEmitter();
   const listener = new LogListener(eventEmitter);
-  railsProc.stdout.on("data", listener.stdout);
-  railsProc.stderr.on("data", listener.stderr);
+  const logsProc = spawn("docker-compose", ["logs", "-f", "db", "web"]);
+  logsProc.stdout.on("data", listener.stdout);
+  logsProc.stderr.on("data", listener.stderr);
   eventEmitter.on("started", () => {
-    railsProc.stdout.unpipe();
-    railsProc.stderr.unpipe();
-    railsProc.stdout.on("data", listener.stdout);
-    railsProc.stderr.on("data", listener.stderr);
-    railsProc.stdout.resume();
-    railsProc.stderr.resume();
+    logsProc.stdout.unpipe();
+    logsProc.stderr.unpipe();
+    logsProc.stdout.on("data", listener.stdout);
+    logsProc.stderr.on("data", listener.stderr);
+    logsProc.stdout.resume();
+    logsProc.stderr.resume();
   });
   eventEmitter.on("error", console.log);
 

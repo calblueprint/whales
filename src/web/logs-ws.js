@@ -9,7 +9,7 @@ module.exports = {
       let logs = pty.spawn(
         process.platform === "win32" ? "docker-compose.exe" : "docker-compose",
         ['logs', '--tail=all', '-f'],
-        { name: "xterm", cwd: process.env.PWD, env: process.env }
+        { name: "xterm", cwd: process.cwd(), env: process.env }
       );
       logs.on('data', (chunk) => ws.send(chunk));
       ws.on('close', () => {

@@ -42,7 +42,7 @@ module.exports = {
 
       ws.on('message', (data) => {
         if (data === "UP") {
-          fs.unlink(path.join(process.env.PWD, "tmp/pids/server.pid"), (err) => {
+          fs.unlink(path.join(process.cwd(), "tmp/pids/server.pid"), (err) => {
             promisifySpawn("docker-compose", ["up", "web"])
               .catch(console.log);
           });

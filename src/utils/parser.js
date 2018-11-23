@@ -184,7 +184,7 @@ const logType = line => {
 
 const ANSIRegex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 const removeANSIstyles = str => str.replace(ANSIRegex, "");
-const dockerPrefix = /web_\d\s*\|\s/g;
+const dockerPrefix = /web_\d(_\w*)*\s*\|\s/g;
 const removeDockerPrefix = str => str.replace(dockerPrefix, "");
 
 const parse = buffer => {
