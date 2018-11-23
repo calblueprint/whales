@@ -178,17 +178,29 @@ export default class Index extends React.Component {
                     </div>
                   </div>
                   <h3>Params</h3>
-                  <p
-                    style={{
-                      color: "rgba(0, 0, 0, 0.3)",
-                      marginBottom: "10px"
-                    }}
-                  >
-                    No params for this request
-                  </p>
-                  <h3>Full Log</h3>
+                  {
+                    req.params.length === 0
+                    ? <p
+                      style={{
+                        color: "rgba(0, 0, 0, 0.3)"
+                      }}
+                    >
+                      No params for this request
+                    </p>
+                    : req.params.map((param) => {
+                        return <div className="param__row">
+                          <span className="param__key">
+                            {param.name}
+                          </span>
+                          <span className="param__val">
+                            {param.value}
+                          </span>
+                        </div>
+                      })
+                  }
+                  <h3 style={{ marginTop: "10px" }}>Full Log</h3>
                   <div className="request__log">
-                    {req.logs.join("\n")}
+                    {req.logs.map(log => <div>{log}</div>)}
                   </div>
                 </div>
               : null

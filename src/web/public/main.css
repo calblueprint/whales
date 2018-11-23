@@ -133,7 +133,7 @@ button {
 .request__meta {
   font-family: Inconsolata;
   font-size: 14pt;
-  flex: 3;
+  flex: 4;
   display: flex;
   align-items: center;
 }
@@ -175,6 +175,7 @@ button {
   text-transform: uppercase;
   font-size: 10pt;
   font-weight: 900;
+  margin-bottom: 5px;
 }
 
 .request__block p {
@@ -185,9 +186,35 @@ button {
   font-family: Inconsolata;
   background-color: black;
   color: white;
-  margin-top: 5px;
   padding: 15px;
   border-radius: 10px;
   max-height: 250px;
   overflow-y: scroll;
+  word-break: break-all;
+}
+
+.param__row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 5px;
+}
+
+.param__row:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+.param__key {
+  flex: 1;
+  flex-wrap: wrap;
+  word-break: break-all;
+}
+
+.param__val {
+  font-family: Inconsolata;
+  flex: 2;
+  word-break: break-all;
 }

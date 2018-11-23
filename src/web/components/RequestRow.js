@@ -1,6 +1,13 @@
 import React from "react";
 import Moment from "react-moment";
 
+const truncate = (str) => {
+  if (str.length > 25) {
+    return `${str.substring(0, 25)}...`;
+  }
+  return str;
+}
+
 class RequestRow extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -25,7 +32,7 @@ class RequestRow extends React.PureComponent {
           >
             {props.method}
           </span>
-          {props.url}
+          {truncate(props.url)}
         </div>
         <div className="request__ts">
           <Moment interval={10000} fromNow>
