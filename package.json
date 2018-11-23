@@ -4,8 +4,6 @@
   "description": "A friendlier Docker environment for Rails",
   "main": "./bin/main.js",
   "dependencies": {
-    "@calblueprint/blessed": "^0.1.81",
-    "@calblueprint/react-blessed": "^0.3.3",
     "@zeit/next-css": "^1.0.1",
     "chalk": "^2.4.1",
     "commander": "^2.18.0",
