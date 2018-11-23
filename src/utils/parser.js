@@ -98,7 +98,7 @@ const PROCESSOR = {
     return { type: "started", data: serverInfo };
   },
   [REQUEST]: line => {
-    let ret = line.match(/Started (\S+) "(\S+)" for \S+ at \d{4}-(\S+ \S+)/);
+    let ret = line.match(/Started (\S+) "(\S+)" for \S+ at (\d{4}-\S+ \S+)/);
     if (!ret) return;
 
     processInfo = {
