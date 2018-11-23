@@ -5,6 +5,7 @@ import RequestRow from '../components/RequestRow';
 
 import '../public/reset.css';
 import '../public/main.css';
+import '../public/fonts.css';
 
 const pwd = process.cwd();
 
