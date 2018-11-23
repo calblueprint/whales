@@ -7,13 +7,14 @@ import '../public/reset.css';
 import '../public/main.css';
 import '../public/fonts.css';
 
+const IS_WIN = process.platform === "win32";
 const pwd = process.cwd();
 
 export default class Index extends React.Component {
   static getInitialProps() {
     return {
       projectPath: pwd,
-      projectName: pwd.split("/").pop(),
+      projectName: IS_WIN ? pwd.split("\\").pop() : pwd.split("/").pop(),
       buttonDisabled: false,
     };
   }
