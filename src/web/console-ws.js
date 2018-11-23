@@ -1,15 +1,23 @@
 const pty = require('node-pty');
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ noServer: true });
+const IS_WIN = process.platform === "win32";
 
 module.exports = (locationArgs) => {
   return {
     handleUpgrade: function(request, socket, head) {
       return wss.handleUpgrade(request, socket, head, (ws) => {
         let wsPipe = (data) => ws.send(data);
-        let projName = process.cwd().split("/").pop();
+
+        let projName = process.cwd();
+        if (IS_WIN) {
+          projName = projName.split("\\").pop();
+        } else {
+          projName = projName.split("/").pop();
+        }
+
         let termProc = pty.spawn(
-          process.platform === "win32" ? "docker-compose.exe" : "docker-compose",
+          IS_WIN ? "docker-compose.exe" : "docker-compose",
           [
             ...locationArgs,
             "run",

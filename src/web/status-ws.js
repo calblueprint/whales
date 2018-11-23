@@ -11,7 +11,13 @@ module.exports = {
   handleUpgrade: function (request, socket, head) {
     return wss.handleUpgrade(request, socket, head, (ws) => {
       ws.sendPayload = function(type, status, data) {
-        this.send(JSON.stringify({ type, status, data }));
+        try {
+          this.send(JSON.stringify({ type, status, data }));
+        } catch (e) {
+          // Silently fail if the payload is dropped.
+          // This usually means that the WebSocket closed before
+          // we cleared the interval?
+        }
       };
       const catchErrorAndNotify = (err) => {
         // TODO: Should there be a way to distinguish DOWN and ERR states?
