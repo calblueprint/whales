@@ -6,6 +6,7 @@ const spawn = require("cross-spawn");
 const ngrok = require("ngrok");
 const BASE_PATH = process.env.BABEL_ENV === "development" ? "../src" : "../dist";
 const startServer = require(`${BASE_PATH}/web/server`);
+const getContainerName = require(`${BASE_PATH}/web/get-container-name`);
 
 // For now, this is just the Rails server spin-up
 
@@ -41,10 +42,20 @@ if (command === "unbuffer") {
 console.log(`Running ${command} ${args.join(" ")}`);
 
 const runWhales = (ngrokUrl) => {
-  const railsProc = spawn(command, args, {});
-  console.log(`ngrok URL: ${ngrokUrl}`);
-  let entrypoint = `${BASE_PATH}/entry`;
-  startServer(locationArgs, railsProc);
+  getContainerName({ skipCache: true })
+  .then(() => {
+    // In the success case, there's already a Whales server running.
+    console.log("\nERR: Whales is already running.\n");
+    console.log("Please check your other Terminal windows and close Whales with Ctrl-C.");
+    console.log("You can also run `whales killall` to terminate any other Docker containers.");
+    process.exit(1);
+  })
+  .catch(() => {
+    const railsProc = spawn(command, args, {});
+    console.log(`Temporary public URL: ${ngrokUrl}`);
+    let entrypoint = `${BASE_PATH}/entry`;
+    startServer(locationArgs, railsProc);
+  });
 
   // Keep it running
   setInterval(() => {}, 1 << 30);
@@ -78,7 +89,6 @@ cleanup()
   .then(runWhales)
   .catch((e) => {
     console.log("Starting Whales in offline mode...");
-    console.log(e);
     runWhales();
   });
 
