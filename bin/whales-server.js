@@ -46,6 +46,9 @@ const runWhales = (ngrokUrl) => {
   let entrypoint = `${BASE_PATH}/entry`;
   startServer(locationArgs, railsProc);
 
+  // Keep it running
+  setInterval(() => {}, 1 << 30);
+
   // Process cleanup
   process.on("exit", () => {
     try {
@@ -87,7 +90,7 @@ const SIGNALS = [
 ];
 SIGNALS.forEach((sig) => {
   process.on(sig, function () {
-    console.log("Whales is exiting gracefully... please be patient.");
+    console.log("\nWhales is exiting gracefully... please be patient.\n");
     cleanup(sig).then(() => process.exit(0));
   });
 });
