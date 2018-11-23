@@ -16,21 +16,27 @@ module.exports = (locationArgs) => {
           projName = projName.split("/").pop();
         }
 
-        let termProc = pty.spawn(
-          IS_WIN ? "docker-compose.exe" : "docker-compose",
-          [
-            ...locationArgs,
-            "run",
-            "-e",
-            "PS1=[🐳 "
-              + String.raw`\[\033[1;34m\]whales\[\033[0m\]`
-              + String.raw`\[\033[0;34m\]@\[\033[0m\]`
-              + String.raw`\[\033[1m\]` + projName + String.raw`\[\033[0m\]] `,
-            "web",
-            "/bin/bash"
-          ],
-          { name: "xterm", cwd: process.cwd(), env: process.env }
-        );
+        let cmd = "docker-compose";
+        let cmdOpts = [
+          ...locationArgs,
+          "run",
+          "-e",
+          "PS1=[🐳 "
+            + String.raw`\[\033[1;34m\]whales\[\033[0m\]`
+            + String.raw`\[\033[0;34m\]@\[\033[0m\]`
+            + String.raw`\[\033[1m\]` + projName + String.raw`\[\033[0m\]] `,
+          "web",
+          "/bin/bash"
+        ];
+        if (IS_WIN) {
+          cmd = "powershell.exe";
+          cmdOpts.unshift("docker-compose");
+        }
+        let termProc = pty.spawn(cmd, cmdOpts, {
+          name: "xterm",
+          cwd: process.cwd(),
+          env: process.env
+        });
         termProc.on('data', wsPipe);
 
         ws.on('message', (msg) => termProc.write(msg));
