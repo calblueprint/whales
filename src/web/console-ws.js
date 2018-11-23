@@ -16,21 +16,26 @@ module.exports = (locationArgs) => {
           projName = projName.split("/").pop();
         }
 
+        const envString = "PS1=[🐳 "
+          + String.raw`\[\033[1;34m\]whales\[\033[0m\]`
+          + String.raw`\[\033[0;34m\]@\[\033[0m\]`
+          + String.raw`\[\033[1m\]` + projName + String.raw`\[\033[0m\]] `;
         let cmd = "docker-compose";
         let cmdOpts = [
           ...locationArgs,
           "run",
           "-e",
-          "PS1=[🐳 "
-            + String.raw`\[\033[1;34m\]whales\[\033[0m\]`
-            + String.raw`\[\033[0;34m\]@\[\033[0m\]`
-            + String.raw`\[\033[1m\]` + projName + String.raw`\[\033[0m\]] `,
+          envString,
           "web",
           "/bin/bash"
         ];
+
         if (IS_WIN) {
           cmd = "powershell.exe";
-          cmdOpts.unshift("docker-compose");
+          cmdOpts = [
+            "-command",
+            `docker-compose run -e '${envString}' web /bin/bash`
+          ];
         }
         let termProc = pty.spawn(cmd, cmdOpts, {
           name: "xterm",
