@@ -99,6 +99,22 @@ fetch("https://raw.githubusercontent.com/calblueprint/whales-snap/master/.whales
   const pullCmd = crossSpawn("git", ["pull", "-Xtheirs", "upstream", "master"]);
   pullCmd.stdout.pipe(process.stdout);
   pullCmd.stderr.pipe(process.stderr);
+  return new Promise((resolve, reject) => {
+    pullCmd.on("exit", (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject("ERR: There was an error pulling in upstream changes.");
+      }
+    });
+  });
+})
+.then(() => {
+  console.log("\nYour project has been updated to", latestVersion, " ✨\n");
+  console.log("Running bootstrap to finalize update...");
+  const bootstrapCmd = crossSpawn("whales", ["bootstrap"]);
+  bootstrapCmd.stdout.pipe(process.stdout);
+  bootstrapCmd.stderr.pipe(process.stderr);
 })
 .catch((err) => {
   console.log("There was an error updating this Whales project:\n");
