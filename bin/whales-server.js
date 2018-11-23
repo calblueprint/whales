@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
+const program = require("commander");
+program
+  .option("-v, --verbose", "Show verbose boot output")
+  .parse(process.argv);
+
 const fs = require("fs");
 const path = require("path");
 const spawn = require("cross-spawn");
 const ngrok = require("ngrok");
+
 const BASE_PATH = process.env.BABEL_ENV === "development" ? "../src" : "../dist";
 const startServer = require(`${BASE_PATH}/web/server`);
 const getContainerName = require(`${BASE_PATH}/web/get-container-name`);
@@ -52,6 +58,10 @@ const runWhales = (ngrokUrl) => {
   })
   .catch(() => {
     const railsProc = spawn(command, args, {});
+    if (program.verbose) {
+      railsProc.stdout.pipe(process.stdout);
+      railsProc.stderr.pipe(process.stderr);
+    }
     console.log(`Temporary public URL: ${ngrokUrl}`);
     let entrypoint = `${BASE_PATH}/entry`;
     startServer(locationArgs, railsProc);
