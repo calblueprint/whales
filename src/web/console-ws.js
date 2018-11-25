@@ -44,7 +44,18 @@ module.exports = (locationArgs) => {
         });
         termProc.on('data', wsPipe);
 
-        ws.on('message', (msg) => termProc.write(msg));
+        ws.on('message', (msg) => {
+          if (msg.indexOf("resize") > -1) {
+            try {
+              let coords = JSON.parse(msg);
+              termProc.resize(coords.resize.cols, coords.resize.rows);
+            } catch (e) {
+              console.log("Error resizing pty", e);
+            }
+          } else {
+            termProc.write(msg);
+          }
+        });
         ws.on('close', () => {
           termProc.kill();
         });

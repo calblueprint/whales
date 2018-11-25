@@ -16,6 +16,8 @@ export default class Console extends React.Component {
   componentDidMount() {
     const consoleFontRegular = new FontFaceObserver("Inconsolata", { weight: 400 }).load();
     const consoleFontBold = new FontFaceObserver("Inconsolata", { weight: 700 }).load();
+    this.socket = new WebSocket(this.props.wsUrl);
+
     Promise.all([consoleFontRegular, consoleFontBold]).then(() => {
       Terminal.applyAddon(attach);
       Terminal.applyAddon(fullscreen);
@@ -24,10 +26,18 @@ export default class Console extends React.Component {
         fontFamily: "Inconsolata",
         fontSize: "16"
       });
-      var socket = new WebSocket(this.props.wsUrl);
+
       term.open(this.termDiv.current);
       term.fit();
-      term.attach(socket);
+      term.attach(this.socket);
+      this.socket.addEventListener("open", () => {
+        this.socket.send(JSON.stringify({
+          resize: {
+            cols: term.cols,
+            rows: term.rows
+          }
+        }));
+      });
     });
   }
 
