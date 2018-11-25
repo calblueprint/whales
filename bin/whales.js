@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 const program = require("commander");
+const promiseFinally = require('promise.prototype.finally');
 
 program
-  .version("0.2.5")
+  .version("0.2.6")
   .command("server", "start a Whales server for the project in this directory")
     .alias("s")
   .command("new", "create a new Whales project in this directory")
