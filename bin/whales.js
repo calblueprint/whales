@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 const program = require("commander");
-const promiseFinally = require('promise.prototype.finally');
+const promiseFinally = require("promise.prototype.finally");
+const updateNotifier = require("update-notifier");
+const pkg = require("../package.json");
+
+updateNotifier({ pkg }).notify({ isGlobal: true });
 
 program
-  .version("0.2.6")
+  .version("0.2.7")
   .command("server", "start a Whales server for the project in this directory")
     .alias("s")
   .command("new", "create a new Whales project in this directory")
