@@ -2,6 +2,8 @@
 
 const program = require("commander");
 const promiseFinally = require("promise.prototype.finally");
+promiseFinally.shim();
+
 const updateNotifier = require("update-notifier");
 const pkg = require("../package.json");
 
