@@ -10,7 +10,7 @@ const pkg = require("../package.json");
 updateNotifier({ pkg }).notify({ isGlobal: true });
 
 program
-  .version("0.2.7")
+  .version("0.2.8")
   .command("server", "start a Whales server for the project in this directory")
     .alias("s")
   .command("new", "create a new Whales project in this directory")
